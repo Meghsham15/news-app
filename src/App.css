@@ -1,38 +1,264 @@
-.App {
+/* src/App.css */
+
+.app {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.articles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.article-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.article-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.pagination {
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #0056b3;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+}
+
+.search{
+  /* font-size: 30px; */
+  display: flex;
+  /* width: 100%; */
+  justify-content: center;
+}
+.search input{
+  font-size: 16px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 3px 0px;
+  width: 250px;
+  transition: 1s ease-in-out forwards;
+}
+
+.search input:focus{
+  box-shadow: inset 0px 0px 3px 0px;
+  outline: none;
+}
+
+.search button{
+  cursor: pointer;
+  transition: 1s ease-in-out forwards;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 10px;
+  border: none;
+  margin: 0px 8px;
+  box-shadow: 0px 0px 3px 0px;
+  
+}
+
+.search button:active{
+  box-shadow: inset 0px 0px 3px 0px;
+}
+
+.search a {
+  margin: 0 10px;
+  color: black;
+}
+
+.categories{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.categories label{
+  font-size: 16px;
+  padding: 0px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-fav{
+  margin: 0 10px;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: red;
+}
+
+.remove-fav {
+  margin: 0 10px;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: mediumseagreen;
+}
+
+.categories select{
+  font-size: 16px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0px 0px 2px 0px;
+}
+
+/* src/components/ArticleCard.css */
+
+.article-card {
+  border: 1px solid #ddd;
+  text-align: justify;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.article-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.article-card h2 {
+  font-size: 1.5em;
+}
+
+.article-card p {
+  color: #555;
+}
+
+.article-card a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.article-card a:hover {
+  text-decoration: underline;
+}
+
+/* src/components/Pagination.css */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #0056b3;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+}
+
+.pagination button:disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
+.error{
+  text-align: center;
+  font-size: 30px;
+}
+
+/* Detail page -  */
+
+.detail-page{
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  padding: 30px 0;
 }
 
-.App-link {
-  color: #61dafb;
+.detail-page h2{
+  font-size: 30px;
+  width: 600px;
+  margin: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.detail-page img {
+  width: 600px;
+  margin: 20px 0;
+  box-shadow: 0px 0px 5px 0px;
+  border-radius: 8px;
+}
+
+.detail-page p{
+  width: 600px;
+  text-align: justify;
+  margin: 0;
+}
+
+.detail-page h3 {
+  text-align: left;
+  width: 600px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.detail-head{
+  text-align: left;
+  width: 600px;
+  margin-top: 0;
+}
+
+.fav-button{
+  cursor: pointer;
+  transition: 1s ease-in-out forwards;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: none;
+  margin: 0px 8px;
+  box-shadow: 0px 0px 3px 0px;
+}
+
+.fav-button:active{
+  box-shadow: inset  0px 2px 0px;
+  outline: none;
 }
