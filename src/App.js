@@ -21,7 +21,7 @@ const App = () => {
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
-  const API_KEY = 'd40ac61b78e04869b1fb1d46834c7c80';
+  const API_KEY = 'ccb8eacce3c74fe9897c7b7dbf7018b7';
   const ARTICLES_PER_PAGE = 10;
 
   const fetchArticles = useCallback(
