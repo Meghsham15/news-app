@@ -22,7 +22,7 @@ const App = () => {
   });
 
   const API_KEY = 'd40ac61b78e04869b1fb1d46834c7c80';
-  const ARTICLES_PER_PAGE = 5;
+  const ARTICLES_PER_PAGE = 10;
 
   const fetchArticles = useCallback(
     async (page, query, category) => {

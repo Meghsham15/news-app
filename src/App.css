@@ -262,3 +262,26 @@
   box-shadow: inset  0px 2px 0px;
   outline: none;
 }
+
+
+@media (max-width: 768px) {
+  .detail-page h2 {
+    font-size: 30px;
+    width: 401px;
+    margin: 0;
+}  
+.detail-page p {
+  width: 401px;
+  text-align: justify;
+  margin: 0;
+}
+
+.detail-page h3 {
+  text-align: left;
+  width: 401px;
+  margin: 0;
+  margin-top: 10px;
+}
+
+} 
+
