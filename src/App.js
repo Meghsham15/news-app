@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, json } from 'react-router-dom';
 import ArticleCard from './components/ArticleCard';
 import Pagination from './components/Pagination';
 import DetailPage from './components/DetailPage';
+import CurrentsAPIClient from './components/CurrentAPIClient';
 import './App.css';
 import HomeIcon from '@mui/icons-material/Home';
-import debounce from 'lodash.debounce';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
@@ -21,50 +21,57 @@ const App = () => {
     return savedFavorites ? JSON.parse(savedFavorites) : [];
   });
 
-  const API_KEY = 'd40ac61b78e04869b1fb1d46834c7c80';
-  const ARTICLES_PER_PAGE = 10;
+  const API_KEY = 'UnggGKgONF374aT8S6FudtEfpSHt6u7dKZYqGONX_upqgRIH';
+  const ARTICLES_PER_PAGE = 30;
+  let client = new CurrentsAPIClient(API_KEY);
 
-  const fetchArticles = useCallback(
-    async (page, query, category) => {
-      setLoading(true);
-      setError(null);
+  const fetchArticles = async (page, query, category) => {
+    setLoading(true);
+    setError(null);
+    
+    if (!query && !category) {
+      let res = await client.fetchLatestNews(page);
+      if(res.status){
+        setNews(res.data);
+      }else{
+        setError(res.data);
+        setNews({news:[]});
+        console.log(res.data);
+      }
+    } else if (category||category!=='') {
+      let res = await client.fetchArticlesByCategory(category,page);
+      if(res.status){
+        setNews(res.data);
+      }else{
+        setError(res.data);
+        setNews({news:[]});
+        console.log(res.data);
+      }
+    }else if(query||query!==''){
+      let res = await client.fetchArticlesByQuery(query,page);
+      if(res.status){
+        setNews(res.data);
+      }else{
+        setError("Api error "+JSON.stringify(res));
+        setNews({news:[]});
+        console.log(res);
+      }
+    }
+  };
 
-      let url = `https://newsapi.org/v2/everything?q=${query}&pageSize=${ARTICLES_PER_PAGE}&page=${page}&apiKey=${API_KEY}`;
-      if (!query && !category) {
-        url = `https://newsapi.org/v2/everything?q=latest&pageSize=${ARTICLES_PER_PAGE}&page=${page}&apiKey=${API_KEY}`;
-      } else if (category) {
-        url = `https://newsapi.org/v2/top-headlines?category=${category}&pageSize=${ARTICLES_PER_PAGE}&page=${page}&apiKey=${API_KEY}`;
-      }
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          if (response.status === 429) {
-            setError('Too many requests. Please try again later.');
-          } else {
-            throw new Error(`Failed to fetch articles: ${response.status}`);
-          }
-        } else {
-          const data = await response.json();
-          setArticles(data.articles);
-          setTotalResults(data.totalResults);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-        setError('Failed to load articles. Please try again later.');
-        setLoading(false);
-      }
-    },
-    [API_KEY]
-  );
+  function setNews(data) {
+    setArticles(data.news);
+    setTotalResults(data.news.length); // Currents API does not provide total results, so using length of current batch
+    setLoading(false);
+  }
 
   useEffect(() => {
     fetchArticles(currentPage, searchQuery, category);
-  }, [currentPage, fetchArticles, searchQuery, category]);
+  }, [currentPage, category]);
 
   useEffect(() => {
     fetchArticles(1, '', '');
-  }, [fetchArticles]);
+  }, []);
 
   const totalPages = Math.ceil(totalResults / ARTICLES_PER_PAGE);
 
@@ -72,22 +79,15 @@ const App = () => {
     setSearchQuery(event.target.value);
   };
 
-  const debouncedFetchArticles = useCallback(
-    debounce((page, query, category) => {
-      fetchArticles(page, query, category);
-    }, 500),
-    [fetchArticles]
-  );
-
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    debouncedFetchArticles(1, searchQuery, category);
+    fetchArticles(1, searchQuery, category);
   };
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
     setCurrentPage(1);
-    debouncedFetchArticles(1, searchQuery, event.target.value);
+    fetchArticles(1, searchQuery, event.target.value);
   };
 
   const toggleFavorite = (article) => {
@@ -108,7 +108,7 @@ const App = () => {
       <div className="app">
         <h1>Latest News</h1>
         <form className='search' onSubmit={handleSearchSubmit}>
-        <a href='/'><HomeIcon fontSize="large"/></a>
+          <a href='/'><HomeIcon fontSize="large" /></a>
           <input
             type="text"
             value={searchQuery}
@@ -129,15 +129,12 @@ const App = () => {
               <option value="science">Science</option>
               <option value="sports">Sports</option>
               <option value="general">General</option>
-              <option value="stock">Stock</option>
-              <option value="games">Games</option>
-              <option value="travel">Travel</option>
             </select>
           </div>
           <Link to={`/`}>
-          <button className='fav-button' onClick={handleShowFavorites}>
-            {showFavorites ? 'Show All Articles' : 'Show Favorites'}
-          </button>
+            <button className='fav-button' onClick={handleShowFavorites}>
+              {showFavorites ? 'Show All Articles' : 'Show Favorites'}
+            </button>
           </Link>
         </div>
         {error && <p className="error">{error}</p>}
@@ -152,7 +149,7 @@ const App = () => {
                   <div className="articles">
                     {(showFavorites ? favorites : articles).map((article) => (
                       <ArticleCard
-                        key={article.url}
+                        key={article.id}
                         article={article}
                         isFavorite={favorites.some((fav) => fav.url === article.url)}
                         toggleFavorite={toggleFavorite}

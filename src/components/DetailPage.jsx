@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 const DetailPage = ({ articles }) => {
   const { id } = useParams();
-  const article = articles.find((article) => article.url === id);
+  const article = articles.find((article) => article.id === id);
 
 //   useEffect(()=>{
 //     console.log(article.description);
@@ -14,18 +14,18 @@ const DetailPage = ({ articles }) => {
     return <p>Article not found</p>;
   }
 
-  const { title, description, content, url, urlToImage, publishedAt, source } = article;
+  const { title, description, author, url, image, published } = article;
 
   return (
     <div className="detail-page">
       <h2>{title}</h2>
-      {urlToImage && <img src={urlToImage} alt={title} />}
+      {image && <img src={image} alt={title} />}
       <p>{description}</p>
-      {content && <p>{content}</p>}
+      {/* { && <p>{content}</p>} */}
       <h3>Published At: </h3>
-      <p className='detail-head'>{new Date(publishedAt).toLocaleString()}</p>
-      <h3>Source: </h3>
-      <p className='detail-head'>{source.name}</p>
+      <p className='detail-head'>{new Date(published).toLocaleString()}</p>
+      <h3>Author: </h3>
+      <p className='detail-head'>{author}</p>
       <a href={url} target="_blank" rel="noopener noreferrer">
         Read the full article
       </a>
