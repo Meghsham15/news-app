@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f2efef;
+  background-image: url(https://transparenttextures.com/patterns/asfalt-dark.png);
 }
 
 code {

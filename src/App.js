@@ -134,7 +134,7 @@ const App = () => {
             onChange={handleSearch}
             placeholder="Search for news..."
           />
-          <button type="submit">Search</button>
+          <button type="submit">🔍Search</button>
         </form>
         <div className="controls">
         {/* categories selector input -  */}
@@ -154,7 +154,7 @@ const App = () => {
           {/* Showing and removal of fav articles -  */}
           <Link to={`/news-app`}>
             <button className='fav-button' onClick={handleShowFavorites}>
-              {showFavorites ? 'Show All Articles' : 'Show Favorites'}
+              {showFavorites ? 'Show All Articles' : 'Show ♥'}
             </button>
           </Link>
         </div>
