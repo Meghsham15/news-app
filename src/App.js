@@ -143,7 +143,7 @@ const App = () => {
         ) : (
           <Routes>
             <Route
-              path="/"
+              path="/*"
               element={
                 <>
                   <div className="articles">
