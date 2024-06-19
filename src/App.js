@@ -159,8 +159,7 @@ const App = () => {
           </Link>
         </div>
         {/* error and loading handling */}
-        {error && <p className="error">{error}</p>}
-        {loading ? (
+        {error?<p className="error">{error}</p>:loading ? (
           <p>Loading...</p>
         ) : (
           <Routes>
