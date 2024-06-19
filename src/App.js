@@ -1,3 +1,4 @@
+// Import all the necessary components and packages - 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, json } from 'react-router-dom';
 import ArticleCard from './components/ArticleCard';
@@ -8,10 +9,10 @@ import './App.css';
 import HomeIcon from '@mui/icons-material/Home';
 
 const App = () => {
+  // set necessary constants - 
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [category, setCategory] = useState('');
   const [showFavorites, setShowFavorites] = useState(false);
@@ -22,14 +23,24 @@ const App = () => {
   });
 
   const API_KEY = 'UnggGKgONF374aT8S6FudtEfpSHt6u7dKZYqGONX_upqgRIH';
-  const ARTICLES_PER_PAGE = 30;
+
+  // initialize the CurrentsAPIClient class for execution - 
   let client = new CurrentsAPIClient(API_KEY);
 
+  // Function to fetch news articles from currentsAPI based on categories and queries - 
   const fetchArticles = async (page, query, category) => {
     setLoading(true);
     setError(null);
-    
-    if (!query && !category) {
+    if(query&&category){
+      let res = await client.fetchArticlesByQuery(query,page);
+      if(res.status){
+        setNews(res.data);
+      }else{
+        setError("Api error "+JSON.stringify(res));
+        setNews({news:[]});
+        console.log(res);
+      }
+    }else if (!query && !category) {
       let res = await client.fetchLatestNews(page);
       if(res.status){
         setNews(res.data);
@@ -59,37 +70,44 @@ const App = () => {
     }
   };
 
+  // update the news articles for display - 
   function setNews(data) {
     setArticles(data.news);
-    setTotalResults(data.news.length); // Currents API does not provide total results, so using length of current batch
     setLoading(false);
   }
 
+  // set the news articles according to the catergory and query changes - 
   useEffect(() => {
     fetchArticles(currentPage, searchQuery, category);
   }, [currentPage, category]);
 
+  // set the initial articles when the component loads - 
   useEffect(() => {
     fetchArticles(1, '', '');
   }, []);
 
-  const totalPages = Math.ceil(totalResults / ARTICLES_PER_PAGE);
+  // set the pagination numbers to 1000 - 
+  const totalPages = 1000;
 
+  // update search queries input - 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
 
+  // handle search query submit - 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    fetchArticles(1, searchQuery, category);
+    fetchArticles(1, searchQuery, "");
   };
 
+  // update category inputs - 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
     setCurrentPage(1);
-    fetchArticles(1, searchQuery, event.target.value);
+    fetchArticles(1, '', event.target.value);
   };
 
+  // add/remove favorites - 
   const toggleFavorite = (article) => {
     const updatedFavorites = favorites.some((fav) => fav.url === article.url)
       ? favorites.filter((fav) => fav.url !== article.url)
@@ -99,6 +117,7 @@ const App = () => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
+  // handle showing of favorites - 
   const handleShowFavorites = () => {
     setShowFavorites(!showFavorites);
   };
@@ -108,7 +127,7 @@ const App = () => {
       <div className="app">
         <h1>Latest News</h1>
         <form className='search' onSubmit={handleSearchSubmit}>
-          <a href='/'><HomeIcon fontSize="large" /></a>
+          <a href='/news-app'><HomeIcon fontSize="large" /></a>
           <input
             type="text"
             value={searchQuery}
@@ -118,6 +137,7 @@ const App = () => {
           <button type="submit">Search</button>
         </form>
         <div className="controls">
+        {/* categories selector input -  */}
           <div className="categories">
             <label htmlFor="category-select">Choose a category:</label>
             <select id="category-select" value={category} onChange={handleCategoryChange}>
@@ -131,17 +151,20 @@ const App = () => {
               <option value="general">General</option>
             </select>
           </div>
-          <Link to={`/`}>
+          {/* Showing and removal of fav articles -  */}
+          <Link to={`/news-app`}>
             <button className='fav-button' onClick={handleShowFavorites}>
               {showFavorites ? 'Show All Articles' : 'Show Favorites'}
             </button>
           </Link>
         </div>
+        {/* error and loading handling */}
         {error && <p className="error">{error}</p>}
         {loading ? (
           <p>Loading...</p>
         ) : (
           <Routes>
+          {/* mapping of news articles by checking their fav status-  */}
             <Route
               path="/*"
               element={

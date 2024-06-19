@@ -5,11 +5,6 @@ const DetailPage = ({ articles }) => {
   const { id } = useParams();
   const article = articles.find((article) => article.id === id);
 
-//   useEffect(()=>{
-//     console.log(article.description);
-//     console.log(article.content);
-//   },[]);
-
   if (!article) {
     return <p>Article not found</p>;
   }

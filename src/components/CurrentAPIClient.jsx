@@ -1,8 +1,11 @@
+
+// Class for handling the fetch requests - 
 class CurrentsAPIClient {
     constructor(apiKey) {
         this.apiKey = apiKey;
     }
 
+    // main fetch function - 
     async fetchArticles(url) {
         try {
             const response = await fetch(url);
@@ -17,26 +20,22 @@ class CurrentsAPIClient {
         }
     }
 
+    // fetch function for category - 
     async fetchArticlesByCategory(category, page) {
         let url = `https://api.currentsapi.services/v1/latest-news?category=${category}&language=en&page_number=${page}&apiKey=${this.apiKey}`;
         return await this.fetchArticles(url);
     }
 
+    // fetch function for latest news - 
     async fetchLatestNews(page) {
         let url = `https://api.currentsapi.services/v1/latest-news?language=en&page_number=${page}&apiKey=${this.apiKey}`;
         return await this.fetchArticles(url);
     }
 
+    // fetch function for news articles by query -
     async fetchArticlesByQuery(query, page) {
         const encodedQuery = encodeURIComponent(query);
         let url = `https://api.currentsapi.services/v1/search?keywords=${encodedQuery}&language=en&page_number=${page}&apiKey=${this.apiKey}`;
-
-        return await this.fetchArticles(url);
-    }
-
-    async fetchArticlesByQueryAndCategory(query,category, page) {
-        query = encodeURIComponent(query);
-        let url = `https://api.currentsapi.services/v1/search?keywords=${query}&category=${category}&language=en&page_number=${page}&apiKey=${this.apiKey}`;
 
         return await this.fetchArticles(url);
     }
