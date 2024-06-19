@@ -7,6 +7,7 @@ import DetailPage from './components/DetailPage';
 import CurrentsAPIClient from './components/CurrentAPIClient';
 import './App.css';
 import HomeIcon from '@mui/icons-material/Home';
+import mjlogo from "./img/mjlogo.png"
 
 const App = () => {
   // set necessary constants - 
@@ -125,7 +126,10 @@ const App = () => {
   return (
     <Router>
       <div className="app">
+        <div className='heading'>
+        <img src={mjlogo}></img>
         <h1>Latest News</h1>
+        </div>
         <form className='search' onSubmit={handleSearchSubmit}>
           <a href='/news-app'><HomeIcon fontSize="large" /></a>
           <input
