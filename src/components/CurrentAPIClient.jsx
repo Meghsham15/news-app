@@ -39,6 +39,13 @@ class CurrentsAPIClient {
 
         return await this.fetchArticles(url);
     }
+
+    // fetch function for news articles by query -
+    async fetchArticlesByQAndC(query, category, page) {
+        const encodedQuery = encodeURIComponent(query);
+        let url = `https://api.currentsapi.services/v1/search?keywords=${encodedQuery}&category=${category}&language=en&page_number=${page}&apiKey=${this.apiKey}`;
+        return await this.fetchArticles(url);
+    }
 }
 
 export default CurrentsAPIClient;

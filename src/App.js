@@ -33,7 +33,7 @@ const App = () => {
     setLoading(true);
     setError(null);
     if(query&&category){
-      let res = await client.fetchArticlesByQuery(query,page);
+      let res = await client.fetchArticlesByQAndC(query,category,page);
       if(res.status){
         setNews(res.data);
       }else{
@@ -98,14 +98,14 @@ const App = () => {
   // handle search query submit - 
   const handleSearchSubmit = (event) => {
     event.preventDefault();
-    fetchArticles(1, searchQuery, "");
+    fetchArticles(1, searchQuery, category);
   };
 
   // update category inputs - 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
     setCurrentPage(1);
-    fetchArticles(1, '', event.target.value);
+    fetchArticles(1, searchQuery, event.target.value);
   };
 
   // add/remove favorites - 
